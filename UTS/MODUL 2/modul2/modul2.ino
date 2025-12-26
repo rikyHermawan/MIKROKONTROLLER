@@ -89,7 +89,7 @@ void setup()
       Serial.print(client.state());
       delay(2000);
     }
-    client.subscribe("kontrolbas");
+    client.subscribe("kontrolonoff");
     client.subscribe("kontrolspeed");
 
   }
@@ -117,15 +117,17 @@ void receivedCallback(char* topic, byte* payload, unsigned int length) {
 
 /* we got '1' -> MotorOn() */
   if ((char)payload[0] == '1') {
+        digitalWrite(ledPin, HIGH);   // LED ikut ON
         MotorOn();
         Serial.println("Motor On");
   } 
   
 /* we got '0' -> Motoroff */
-  if ((char)payload[0] == '0') {
-        MotorOff(); 
-        Serial.println("Motor Off");  
-  }
+if ((char)payload[0] == '0') {
+      digitalWrite(ledPin, LOW);    // LED ikut OFF
+      MotorOff(); 
+      Serial.println("Motor Off");  
+}
 
     // === Tambahan: kontrol kecepatan via slider ===
   if (String(topic) == "kontrolspeed") {
